@@ -1,13 +1,13 @@
 Dialog Node.js client
 =====================
 
-[Documentation](https://dialogs.github.io/dialog-node-client)
+[Documentation](https://dialogs.github.io/dialog-bot-sdk)
 
 Installation
 ------------
 
 ```bash
-npm install @dlghq/dialog-node-client
+npm install @dlghq/dialog-bot-sdk
 ````
 
 Usage
@@ -15,7 +15,7 @@ Usage
 
 ```js
 const path = require('path');
-const { Bot } = require('@dlghq/dialog-node-client');
+const { Bot } = require('@dlghq/dialog-bot-sdk');
 
 const bot = new Bot({
   endpoints: ['wss://ws1.dlg.im'],

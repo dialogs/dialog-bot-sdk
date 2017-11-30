@@ -31,8 +31,8 @@ type Options = {
  */
 class Bot {
   private ready: Promise<any>;
-  private messageQueue: any;
   private emitter: EventEmitter;
+  private messageQueue: ResolveMessageQueue;
 
   constructor(options: Options) {
     this.emitter = new EventEmitter();
@@ -81,6 +81,13 @@ class Bot {
   }
 
   /**
+   * Subscribes to any bot error.
+   */
+  onError(callback: (error: any) => void) {
+    this.emitter.on('error', callback);
+  }
+
+  /**
    * Subscribes to incoming messages.
    */
   onMessage(callback: (peer: Peer, message: Message) => Promise<void>) {
@@ -90,13 +97,8 @@ class Bot {
         return;
       }
 
-      this.messageQueue.add(peer, mid, (error, message) => {
-        if (error) {
-          this.emitter.emit('error', error);
-        } else if (message) {
-          callback(peer, message).catch(error => this.emitter.emit('error', error));
-        }
-      });
+      const message = await this.messageQueue.resolve(peer, mid);
+      await callback(peer, message);
     });
   }
 

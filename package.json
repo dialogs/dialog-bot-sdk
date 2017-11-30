@@ -1,5 +1,5 @@
 {
-  "name": "@dlghq/dialog-node-client",
+  "name": "@dlghq/dialog-bot-sdk",
   "version": "0.8.1",
   "main": "src/index.js",
   "files": [
@@ -22,8 +22,8 @@
   },
   "devDependencies": {
     "@types/node": "8.0.53",
-    "@types/pino": "^4.7.0",
-    "documentation": "^5.3.3",
+    "@types/pino": "4.7.0",
+    "documentation": "5.3.3",
     "typedoc": "0.9.0",
     "typescript": "2.6.2"
   }

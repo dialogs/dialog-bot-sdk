@@ -51,7 +51,7 @@ class ResolveMessageQueue {
     });
   }
 
-  add(peer: Peer, mid: string): Promise<Message> {
+  resolve(peer: Peer, mid: string): Promise<Message> {
     return new Promise((resolve, reject) => {
       this.queue.push(messenger => {
         messenger.onConversationOpen(peer);
