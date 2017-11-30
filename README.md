@@ -1,5 +1,5 @@
-Dialog Node.js client
-=====================
+Dialog Bot SDK
+==============
 
 [Documentation](https://dialogs.github.io/dialog-bot-sdk)
 
