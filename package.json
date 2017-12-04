@@ -1,7 +1,7 @@
 {
   "name": "@dlghq/dialog-bot-sdk",
   "version": "1.0.0",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "files": [
     "lib"
   ],
