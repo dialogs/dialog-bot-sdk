@@ -15,7 +15,7 @@
     "postpublish": "git push --follow-tags"
   },
   "dependencies": {
-    "@dlghq/dialog-java-core": "1.0.1228",
+    "@dlghq/dialog-java-core": "1.0.1281",
     "jsdom": "9.12.0",
     "pino": "4.10.2",
     "ws": "3.3.2"
