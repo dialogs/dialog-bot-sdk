@@ -11,7 +11,7 @@
     "build": "rm -rf lib/ && tsc",
     "postbuild": "rm -rf docs && typedoc src/ --excludeExternals --excludePrivate --mode file --out docs --exclude src/private/**/*.ts",
     "postversion": "npm publish",
-    "prepublish": "npm run build",
+    "prepare": "npm run build",
     "postpublish": "git push --follow-tags"
   },
   "dependencies": {
