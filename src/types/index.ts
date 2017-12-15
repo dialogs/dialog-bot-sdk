@@ -267,3 +267,16 @@ export type Group = {
   shortname?: string,
   topic?: string
 };
+
+export type MessageRef = {
+  rid: string,
+  peer: Peer
+};
+
+export type InteractiveEvent = {
+  mid: string,
+  uid: number,
+  id: string,
+  value: string,
+  ref: MessageRef
+};

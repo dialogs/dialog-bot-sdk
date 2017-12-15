@@ -9,6 +9,7 @@ import {
   Message,
   FileReference,
   FileDescription,
+  InteractiveEvent,
   MessageAttachment,
   MessageMediaInteractiveActionGroup
 } from './types/index';
@@ -99,6 +100,18 @@ class Bot {
 
       const message = await this.messageQueue.resolve(peer, mid);
       await callback(peer, message);
+    });
+  }
+
+  /**
+   * Subscribes for interactive events.
+   */
+  onInteractiveEvent(callback: (event: InteractiveEvent) => Promise<void>) {
+    this.onAsync('INTERACTIVE_EVENT', async (event) => {
+      const messenger = await this.ready;
+      const ref = await messenger.getMessageRef(event.mid);
+
+      await callback(Object.assign(event, ref));
     });
   }
 
