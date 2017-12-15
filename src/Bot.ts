@@ -18,7 +18,7 @@ import { EventEmitter } from 'events';
 import createClient from './client';
 import ResolveMessageQueue from './private/ResolveMessageQueue';
 
-type Options = {
+export type BotOptions = {
   quiet?: boolean,
   endpoints: string[],
   phone?: string,
@@ -35,7 +35,7 @@ class Bot {
   private emitter: EventEmitter;
   private messageQueue: ResolveMessageQueue;
 
-  constructor(options: Options) {
+  constructor(options: BotOptions) {
     this.emitter = new EventEmitter();
     this.ready = this.setup(options);
   }

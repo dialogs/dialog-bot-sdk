@@ -6,7 +6,7 @@ import patchScope from './private/patch-scope';
 import Logger from './private/runtime/Logger';
 import AsyncStorage from './private/runtime/AsyncStorage/index';
 
-type ClientOptions = {
+export type ClientOptions = {
   quiet?: boolean,
   phoneBook?: any,
   endpoints: string[]

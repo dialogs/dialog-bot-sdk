@@ -73,7 +73,7 @@ export type MessageContentLocation = {
   longitude: number
 };
 
-type Document = {
+export type Document = {
   preview?: string,
   fileUrl?: string,
   fileName?: string,
