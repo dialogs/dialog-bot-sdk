@@ -183,7 +183,7 @@ class Bot {
     peer: Peer,
     text: string,
     actions: MessageMediaInteractiveActionGroup[],
-    attach: MessageAttachment
+    attach?: MessageAttachment
   ): Promise<string> {
     const messenger = await this.ready;
     return messenger.sendInteractiveMessage(peer, text, actions, attach);
@@ -226,10 +226,10 @@ class Bot {
    *
    * @returns Message rid.
    */
-  async sendFileMessage(peer: Peer, fileName: string): Promise<string> {
+  async sendFileMessage(peer: Peer, fileName: string, attach?: MessageAttachment | null): Promise<string> {
     const messenger = await this.ready;
     const file = await (File as any).create(fileName);
-    return messenger.sendMessage(peer, file);
+    return messenger.sendFile(peer, file, attach);
   }
 
   /**
