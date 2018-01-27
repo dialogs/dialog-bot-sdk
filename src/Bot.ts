@@ -16,6 +16,7 @@ import {
 } from './types/index';
 
 import { EventEmitter } from 'events';
+import Jimp = require('jimp');
 import createClient from './client';
 import ResolveMessageQueue from './private/ResolveMessageQueue';
 
@@ -224,13 +225,52 @@ class Bot {
    *
    * @param peer target peer
    * @param fileName path to file in filesystem
+   * @param attach message attachment (reply/forward)
    *
    * @returns Message rid.
    */
-  async sendFileMessage(peer: Peer, fileName: string, attach?: MessageAttachment | null): Promise<string> {
+  async sendFileMessage(peer: Peer, fileName: string, attach?: OutAttach | null): Promise<string> {
     const messenger = await this.ready;
     const file = await (File as any).create(fileName);
     return messenger.sendFile(peer, file, attach);
+  }
+
+  /**
+   * Optimistically sends image message.
+   *
+   * @param peer target peer
+   * @param fileName path to file in filesystem
+   * @param attach message attachment (reply/forward)
+   *
+   * @returns Message rid.
+   */
+  async sendImageMessage(peer: Peer, fileName: string, attach?: OutAttach | null): Promise<string> {
+    const messenger = await this.ready;
+    const file = await (File as any).create(fileName);
+    const image = await Jimp.read(fileName)
+    const { width, height } = image.bitmap;
+
+    const preview = image
+      .resize(Jimp.AUTO, 100)
+      .quality(5);
+
+    const base64 = await new Promise((resolve, reject) => {
+      (preview as any).getBase64('image/jpeg', (error, base64) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(base64);
+        }
+      });
+    });
+
+    const thumb = {
+      base64,
+      width: preview.bitmap.width,
+      height: preview.bitmap.height
+    };
+
+    return messenger.sendPhotoWithPreview(peer, file, width, height, thumb, attach);
   }
 
   /**
