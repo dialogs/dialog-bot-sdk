@@ -280,3 +280,9 @@ export type InteractiveEvent = {
   value: string,
   ref: MessageRef
 };
+
+export type OutAttach = {
+  type: 'reply' | 'forward',
+  peer: Peer,
+  rids: string[]
+};

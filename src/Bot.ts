@@ -7,6 +7,7 @@ import {
   User,
   Group,
   Message,
+  OutAttach,
   FileReference,
   FileDescription,
   InteractiveEvent,
@@ -148,11 +149,11 @@ class Bot {
    *
    * @param peer   target peer
    * @param text   message text
-   * @param attach message attachment
+   * @param attach message attachment (reply/forward)
    *
    * @returns Message rid.
    */
-  async sendTextMessage(peer: Peer, text: string, attach: MessageAttachment): Promise<string> {
+  async sendTextMessage(peer: Peer, text: string, attach: OutAttach): Promise<string> {
     const messenger = await this.ready;
     return messenger.sendMessage(peer, text, attach);
   }
@@ -175,7 +176,7 @@ class Bot {
    * @param peer    target peer
    * @param text    message text
    * @param actions interactive actions
-   * @param attach  message attachment
+   * @param attach  message attachment (reply/forward)
    *
    * @returns Message rid.
    */
@@ -183,7 +184,7 @@ class Bot {
     peer: Peer,
     text: string,
     actions: MessageMediaInteractiveActionGroup[],
-    attach?: MessageAttachment
+    attach?: OutAttach
   ): Promise<string> {
     const messenger = await this.ready;
     return messenger.sendInteractiveMessage(peer, text, actions, attach);
