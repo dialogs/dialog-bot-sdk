@@ -5,10 +5,10 @@
 const { Bot } = require('../lib');
 
 const bot = new Bot({
-  quiet: true,
-  endpoints: ['wss://ws1.dlg.im'],
-  phone: '75555555555',
-  code: '5555'
+  // quiet: true,
+  endpoints: [process.env.ENDPOINT],
+  username: process.env.USERNAME,
+  password: process.env.PASSWORD
 });
 
 bot.onMessage(async (peer, message) => {
@@ -17,7 +17,19 @@ bot.onMessage(async (peer, message) => {
 
   console.log(message);
   if (message.content.type === 'text') {
-    await bot.sendTextMessage(peer, message.content.text);
+    const actions = [{
+      title: 'Example',
+      actions: [{
+        id: 'test',
+        widget: {
+          type: 'button',
+          value: 'test',
+          label: 'Test'
+        }
+      }]
+    }];
+    const reply = { type: 'reply', peer, rids: [message.rid] };
+    await bot.sendInteractiveMessage(peer, message.content.text, actions, reply);
   }
 });
 

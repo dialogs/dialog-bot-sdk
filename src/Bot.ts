@@ -14,6 +14,7 @@ import {
   MessageAttachment,
   MessageMediaInteractiveActionGroup
 } from './types/index';
+import { convertPeer } from './private/utils/api';
 
 import { EventEmitter } from 'events';
 import Jimp = require('jimp');
@@ -77,7 +78,10 @@ class Bot {
     return messenger;
   }
 
-  private onAsync(eventName: string, callback: (...args: any[]) => Promise<void>): void {
+  /**
+   * Subscribes to any update. This is undocumented functionality.
+   */
+  onAsync(eventName: string, callback: (...args: any[]) => Promise<void>): void {
     this.emitter.on(eventName, (...args) => {
       callback(...args).catch((error) => this.emitter.emit('error', error));
     });
@@ -94,14 +98,15 @@ class Bot {
    * Subscribes to incoming messages.
    */
   onMessage(callback: (peer: Peer, message: Message) => Promise<void>) {
-    this.onAsync('MESSAGE_ADD', async ({ peer, mid, sender }) => {
+    this.onAsync('UpdateMessage', async ({ peer, mid, senderUid }) => {
       const messenger = await this.ready;
-      if (sender === messenger.getUid()) {
+      if (senderUid === messenger.getUid()) {
         return;
       }
 
-      const message = await this.messageQueue.resolve(peer, mid);
-      await callback(peer, message);
+      const convertedPeer = convertPeer(peer);
+      const message = await this.messageQueue.resolve(convertedPeer, mid);
+      await callback(convertedPeer, message);
     });
   }
 
@@ -109,11 +114,11 @@ class Bot {
    * Subscribes for interactive events.
    */
   onInteractiveEvent(callback: (event: InteractiveEvent) => Promise<void>) {
-    this.onAsync('INTERACTIVE_EVENT', async (event) => {
+    this.onAsync('UpdateInteractiveMediaEvent', async ({ mid, id, value, uid }) => {
       const messenger = await this.ready;
-      const ref = await messenger.getMessageRef(event.mid);
+      const ref = await messenger.getMessageRef(mid);
 
-      await callback(Object.assign(event, ref));
+      await callback({ mid, id, value, uid, ref });
     });
   }
 
