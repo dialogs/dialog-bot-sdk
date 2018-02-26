@@ -211,7 +211,7 @@ class Bot {
     actions: MessageMediaInteractiveActionGroup[]
   ): Promise<void> {
     const messenger = await this.ready;
-    messenger.sendInteractiveMessage(peer, rid, text, actions);
+    messenger.editInteractiveMessage(peer, rid, text, actions);
   }
 
   /**

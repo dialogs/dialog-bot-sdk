@@ -2,6 +2,7 @@
  * Copyright 2017 dialog LLC <info@dlg.im>
  */
 
+require('dotenv').config();
 const { Bot } = require('../lib');
 
 const bot = new Bot({
@@ -11,26 +12,55 @@ const bot = new Bot({
   password: process.env.PASSWORD
 });
 
+
+function createActions(value) {
+  return [{
+    title: String(value),
+    actions: [{
+      id: '+1',
+      widget: {
+        type: 'button',
+        value: '+1',
+        label: '+1'
+      }
+    }, {
+      id: '-1',
+      widget: {
+        type: 'button',
+        value: '-1',
+        label: '-1'
+      }
+    }]
+  }];
+}
+
+const state = new Map();
+
 bot.onMessage(async (peer, message) => {
   // get self uid
   const uid = await bot.getUid();
 
-  console.log(message);
   if (message.content.type === 'text') {
-    const actions = [{
-      title: 'Example',
-      actions: [{
-        id: 'test',
-        widget: {
-          type: 'button',
-          value: 'test',
-          label: 'Test'
-        }
-      }]
-    }];
+    const actions = createActions(0);
     const reply = { type: 'reply', peer, rids: [message.rid] };
-    await bot.sendInteractiveMessage(peer, message.content.text, actions, reply);
+    const rid = await bot.sendInteractiveMessage(peer, '', actions, reply);
+    state.set(rid, 0);
   }
+});
+
+bot.onInteractiveEvent(async (event) => {
+  let value = state.get(event.ref.rid) || 0;
+  switch (event.id) {
+    case '+1':
+      value += 1;
+      break;
+    case '-1':
+      value -= 1;
+      break;
+  }
+
+  state.set(event.ref.rid, value);
+  await bot.editInteractiveMessage(event.ref.peer, event.ref.rid, '', createActions(value));
 });
 
 // handle errors

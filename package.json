@@ -25,6 +25,7 @@
     "@types/node": "9.4.6",
     "@types/pino": "4.7.1",
     "documentation": "5.4.0",
+    "dotenv": "5.0.0",
     "typedoc": "0.10.0",
     "typescript": "2.7.2"
   }
