@@ -71,7 +71,7 @@ class Bot {
 
     this.messageQueue = new ResolveMessageQueue(messenger);
 
-    messenger.onUpdate((update) => {
+    messenger.subscribeUpdates((update) => {
       this.emitter.emit(update.type, update.payload);
     });
 
