@@ -22,12 +22,9 @@ import createClient from './client';
 import ResolveMessageQueue from './private/ResolveMessageQueue';
 
 export type BotOptions = {
+  token: string,
   quiet?: boolean,
-  endpoints: string[],
-  phone?: string,
-  code?: string,
-  username?: string,
-  password?: string
+  endpoints?: string[],
 };
 
 /**
@@ -38,36 +35,18 @@ class Bot {
   private emitter: EventEmitter;
   private messageQueue: ResolveMessageQueue;
 
-  constructor(options: BotOptions) {
+  constructor(options: BotOptions | string) {
     this.emitter = new EventEmitter();
-    this.ready = this.setup(options);
+    this.ready = this.setup(typeof options === 'string' ? { token: options } : options);
   }
 
   private async setup(options) {
     const messenger = await createClient({
-      quiet: options.quiet,
-      endpoints: options.endpoints
+      quiet: options.quiet || true,
+      endpoints: options.endpoints || ['wss://ws1.dlg.im:8443', 'wss://ws2.dlg.im:8443', 'wss://ws3.dlg.im:8443']
     });
 
-    await new Promise((resolve, reject) => {
-      const onSuccess = () => resolve(messenger);
-      const onError = (tag: string, message: string) => reject(new Error(`${tag}: ${message}`));
-
-      if (typeof options.phone === 'string' && typeof options.code === 'string') {
-        messenger.requestSms(
-          options.phone,
-          () => messenger.sendCode(options.code, onSuccess, onError)
-        );
-      } else if (typeof options.username === 'string' && typeof options.password === 'string') {
-        messenger.startUserNameAuth(
-          options.username,
-          () => messenger.sendPassword(options.password, onSuccess, onError),
-          onError
-        );
-      } else {
-        throw new Error('Auth credentials not defined');
-      }
-    });
+    await messenger.doBotTokenAuth(options.token);
 
     this.messageQueue = new ResolveMessageQueue(messenger);
 

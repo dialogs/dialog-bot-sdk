@@ -5,13 +5,7 @@
 require('dotenv').config();
 const { Bot } = require('../lib');
 
-const bot = new Bot({
-  // quiet: true,
-  endpoints: [process.env.ENDPOINT],
-  username: process.env.USERNAME,
-  password: process.env.PASSWORD
-});
-
+const bot = new Bot(process.env.BOT_TOKEN);
 
 function createActions(value) {
   return [{
