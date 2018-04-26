@@ -16,11 +16,7 @@ Usage
 ```js
 const { Bot } = require('@dlghq/dialog-bot-sdk');
 
-const bot = new Bot({
-  endpoints: ['wss://ws1.dlg.im'],
-  phone: '75555555555',
-  code: '5555'
-});
+const bot = new Bot(process.env.BOT_TOKEN);
 
 bot.onMessage(async (peer, message) => {
   // get self uid
