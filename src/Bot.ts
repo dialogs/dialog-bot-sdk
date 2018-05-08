@@ -42,7 +42,7 @@ class Bot {
 
   private async setup(options) {
     const messenger = await createClient({
-      quiet: options.quiet || true,
+      quiet: typeof options.quiet === 'boolean' ? options.quiet : true,
       endpoints: options.endpoints || ['wss://ws1.dlg.im:8443', 'wss://ws2.dlg.im:8443', 'wss://ws3.dlg.im:8443']
     });
 
