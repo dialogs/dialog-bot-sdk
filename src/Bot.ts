@@ -47,6 +47,7 @@ class Bot {
     });
 
     await messenger.doBotTokenAuth(options.token);
+    await new Promise((resolve) => messenger.login(resolve));
 
     this.messageQueue = new ResolveMessageQueue(messenger);
 
