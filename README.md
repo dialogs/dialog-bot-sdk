@@ -34,3 +34,13 @@ bot.onError((error) => {
   process.exit(1);
 });
 ```
+
+Token
+-----
+
+How to get the token: search for `@dialog` bot at Global Dialog (https://app.dlg.im) installation or `@security` in your personal installation.
+Write to the bot `/bot new nickname name` command it will answer with token, like this:
+```
+Yay! Bot created, bot token <token>, bot id: <id>
+```
+This is it.
